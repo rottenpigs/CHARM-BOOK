@@ -1,24 +1,19 @@
-/* =========================================================================
-   CHARMBOOK — atmosphere layer
-   Everything here is an add-on: it never edits your page content.
-   Tweak the numbers in CFG below.
-   ========================================================================= */
 (() => {
 'use strict';
 
-/* ---------- SETTINGS (safe to edit) ---------------------------------- */
+/* ---------- SETTINGS ---------------------------------- */
 const CFG = {
-  audio: 'audio/interview%20with%20a%20vampire%20choir%20music.mp3', // spaces must be %20
-  volume: 0.15,          // 0 (silent) to 1 (full). Keep it low for background music.
-  fadeMs: 6000,          // how long the music takes to fade in
+  audio: 'audio/interview%20with%20a%20vampire%20choir%20music.mp3', 
+  volume: 0.50,          
+  fadeMs: 2000,          
   title: 'CHARMBOOK',
-  glitchMin: 20, glitchMax: 60,   // seconds between random glitch/shudder events
-  eyesMin: 14,  eyesMax: 38,      // seconds between "eyes in the dark"
-  favicon: 40,           // seconds before the tab icon opens its eye
+  glitchMin: 20, glitchMax: 60,   
+  eyesMin: 14,  eyesMax: 38,      
+  favicon: 30,          
   whispers: [
     'we saw you come in', 'the door was open', 'stay a little longer',
     'someone is behind you', 'you are not the first', 'keep the light close',
-    'it is quieter down here', 'do not look at the frame'
+    'it is quieter down here', 'do not look'
   ],
   swapWords: ['STAY', 'LISTEN', 'LOOK', 'HELLO?']
 };
@@ -198,7 +193,7 @@ function glitch() {
   const ttl = $('#ttl'), strip = $('#strip');
   const kinds = coarse ? ['split', 'word'] : ['shake', 'split', 'word'];
   const kind = kinds[Math.random() * kinds.length | 0];
-  if (kind === 'shake') {                      // reuses your page-turn glitch
+  if (kind === 'shake') {                      
     body.classList.add('gl'); setTimeout(() => body.classList.remove('gl'), 460);
   } else if (kind === 'split') {
     ttl.classList.add('split'); setTimeout(() => ttl.classList.remove('split'), 320);
@@ -210,7 +205,7 @@ function glitch() {
   }
 }
 function shudder() {
-  body.classList.remove('shud'); void body.offsetWidth;   // restart the animation
+  body.classList.remove('shud'); void body.offsetWidth;   
   body.classList.add('shud');
   setTimeout(() => body.classList.remove('shud'), 450);
 }
@@ -291,7 +286,7 @@ let ctx = null, gain = null, lvl = 0, fadeT, audible = false, armed = false;
 let want = store.get('cb_snd') !== '0';
 
 a.volume = 0.5;
-const volumeWorks = Math.abs(a.volume - 0.5) < 0.01;      // iPhones ignore audio.volume
+const volumeWorks = Math.abs(a.volume - 0.5) < 0.01;      
 if (!volumeWorks) {
   guard('webaudio gain', () => {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -300,7 +295,7 @@ if (!volumeWorks) {
     src.connect(gain); gain.connect(ctx.destination); a.volume = 1;
   });
 }
-const canControl = volumeWorks || !!gain;                  // never risk full volume
+const canControl = volumeWorks || !!gain;                  
 const setLevel = v => { lvl = v; if (gain) gain.gain.value = v; else a.volume = Math.max(0, Math.min(1, v)); };
 function fadeTo(v, ms, done) {
   clearInterval(fadeT);
@@ -326,7 +321,7 @@ function onGesture(e) {
   resumeCtx(); a.muted = false;
   const p = a.play();
   Promise.resolve(p).then(() => { if (want && !audible) goAudible(); disarm(); })
-    .catch(() => { a.muted = true; });                       // not a real activation yet: wait for the next one
+    .catch(() => { a.muted = true; });                       
 }
 function arm() { if (armed) return; armed = true; GESTURES.forEach(g => addEventListener(g, onGesture, true)); }
 function disarm() { armed = false; GESTURES.forEach(g => removeEventListener(g, onGesture, true)); }
@@ -337,7 +332,7 @@ else {
   setLevel(0);
   if (want) {
     a.muted = false;
-    a.play().then(goAudible).catch(() => {                   // browser blocked sound: start silently, unmute on first tap/click/key
+    a.play().then(goAudible).catch(() => {                   
       a.muted = true; a.play().catch(() => {}); arm();
     });
   }
