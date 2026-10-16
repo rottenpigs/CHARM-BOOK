@@ -4,7 +4,7 @@
 /* ---------- SETTINGS ---------------------------------- */
 const CFG = {
   audio: 'audio/interview%20with%20a%20vampire%20choir%20music.mp3', 
-  volume: 0.50,          
+  volume: 0.85,          
   fadeMs: 2000,          
   title: 'CHARMBOOK',
   glitchMin: 20, glitchMax: 60,   
