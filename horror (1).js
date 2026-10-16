@@ -1,19 +1,14 @@
-/* =========================================================================
-   CHARMBOOK — atmosphere layer
-   Everything here is an add-on: it never edits your page content.
-   Tweak the numbers in CFG below.
-   ========================================================================= */
 (() => {
 'use strict';
 
 /* ---------- SETTINGS (safe to edit) ---------------------------------- */
 const CFG = {
-  audio: 'audio/interview%20with%20a%20vampire%20choir%20music.mp3', // spaces must be %20
-  volume: 1,             // starting volume: 0 (silent) to 1 (full). Visitors can change it with the slider.
-  fadeMs: 1200,          // how long the music takes to fade in (ms)
+  audio: 'audio/interview%20with%20a%20vampire%20choir%20music.mp3', 
+  volume: 1,             
+  fadeMs: 1200,         
   title: 'CHARMBOOK',
-  glitchMin: 20, glitchMax: 60,   // seconds between random glitch/shudder events
-  favicon: 40,           // seconds before the tab icon opens its eye
+  glitchMin: 20, glitchMax: 60,   
+  favicon: 40,           
   whispers: [
     'we saw you come in', 'the door was open', 'stay a little longer',
     'someone is behind you', 'you are not the first', 'keep the light close',
@@ -171,7 +166,7 @@ function glitch() {
   const ttl = $('#ttl'), strip = $('#strip');
   const kinds = coarse ? ['split', 'word'] : ['shake', 'split', 'word'];
   const kind = kinds[Math.random() * kinds.length | 0];
-  if (kind === 'shake') {                      // reuses your page-turn glitch
+  if (kind === 'shake') {                      
     body.classList.add('gl'); setTimeout(() => body.classList.remove('gl'), 460);
   } else if (kind === 'split') {
     ttl.classList.add('split'); setTimeout(() => ttl.classList.remove('split'), 320);
@@ -199,7 +194,7 @@ function shudder() {
   }, rand(CFG.glitchMin, CFG.glitchMax) * 1000 / speedUp * (coarse ? 1.5 : 1));
 })();
 
-/* ---------- 2. phones: tap marks (desktop gets the picture cursors, see CSS) - */
+/* ---------- 2. phones: tap marks - */
 guard('tap marks', () => {
   addEventListener('pointerdown', e => {
     if (!fxOn || reduce || e.pointerType !== 'touch') return;
@@ -319,7 +314,7 @@ function onGesture(e) {
   Promise.resolve(a.play()).then(() => {
     if (want && !audible) goAudible();
     disarm(); hideGate();
-  }).catch(() => { /* not a real activation yet: stay armed for the next event */ });
+  }).catch(() => {  });
   if (real) hideGate();
 }
 function arm() { if (armed) return; armed = true; GESTURES.forEach(g => addEventListener(g, onGesture, true)); }
