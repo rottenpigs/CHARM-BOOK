@@ -1,0 +1,80 @@
+/* =========================================================================
+   CHARMBOOK — atmosphere layer (styles). Pairs with horror.js
+   ========================================================================= */
+
+/* selection colour (dried blood on bone) */
+::selection{background:#6b0d10;color:#ece8e0}
+::-moz-selection{background:#6b0d10;color:#ece8e0}
+
+/* --- flashlight darkness ------------------------------------------------ */
+#dark{z-index:8;--x:50%;--y:45%;--r:300px;--a:.16;opacity:0;transition:opacity 2.5s ease;will-change:transform;
+  background:radial-gradient(circle var(--r) at var(--x) var(--y),rgba(0,0,0,0) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,var(--a)) 100%)}
+#dark.ready{opacity:1}
+
+/* --- whispers: invisible until the light passes over them --------------- */
+#whisp{z-index:10;--x:50%;--y:45%;--wr:130px;will-change:transform;
+  -webkit-mask-image:radial-gradient(circle var(--wr) at var(--x) var(--y),#000 0%,rgba(0,0,0,0) 100%);
+          mask-image:radial-gradient(circle var(--wr) at var(--x) var(--y),#000 0%,rgba(0,0,0,0) 100%)}
+#whisp span{position:absolute;writing-mode:vertical-rl;white-space:nowrap;line-height:1.2;letter-spacing:.28em;
+  font-family:'Special Elite',monospace;color:#d8d2c4;text-shadow:0 0 8px #000,0 0 2px #000}
+
+/* --- eyes in the dark ---------------------------------------------------- */
+#eyes{z-index:10}
+.ey{position:absolute;opacity:0;animation:eyin 1.6s ease-out forwards;
+  filter:drop-shadow(0 0 4px rgba(236,232,224,.55)) drop-shadow(0 0 12px rgba(236,232,224,.25))}
+.ey svg{display:block;width:100%;height:auto;transform-origin:50% 50%;animation:eyb 4.2s infinite}
+.ey.out{animation:eyout .9s ease-in forwards}
+.ey.snap{animation:eyout .16s linear forwards}
+@keyframes eyin{to{opacity:.85}}
+@keyframes eyout{from{opacity:.85}to{opacity:0}}
+@keyframes eyb{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.06)}}
+
+/* --- glitch: colour split on the title ----------------------------------- */
+#ttl.split{text-shadow:4px 0 rgba(150,0,0,.85),-4px 0 rgba(0,160,170,.55)}
+
+/* --- layout shudder (translate only, so nothing reflows) ----------------- */
+body{--sh:2px}
+@media (pointer:coarse){body{--sh:1px}}
+@keyframes shud{
+  0%,100%{translate:0 0}
+  10%{translate:calc(var(--sh)*-1) calc(var(--sh)*.5)}
+  20%{translate:var(--sh) calc(var(--sh)*-.5)}
+  32%{translate:calc(var(--sh)*-.5) calc(var(--sh)*-1)}
+  44%{translate:calc(var(--sh)*.5) var(--sh)}
+  60%{translate:calc(var(--sh)*-1) 0}
+  78%{translate:var(--sh) calc(var(--sh)*-.5)}
+}
+body.shud .sc,body.shud #ring,body.shud .oval,body.shud #stks{animation:shud .42s linear}
+
+/* --- tap marks (phones) --------------------------------------------------- */
+.tm{position:fixed;z-index:11;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(236,232,224,.3) 0,rgba(236,232,224,.08) 45%,transparent 70%);
+  box-shadow:inset 0 0 0 1px rgba(236,232,224,.28);animation:tm 1.3s ease-out forwards}
+@keyframes tm{from{transform:scale(.4);opacity:1}to{transform:scale(2.3);opacity:0}}
+
+/* --- sound / effects buttons --------------------------------------------- */
+#ctl button{position:fixed;top:max(12px,calc(env(safe-area-inset-top,0px) + 8px));z-index:20;width:44px;height:38px;padding:0;
+  display:grid;place-items:center;background:#000;color:var(--b);border:1px solid var(--b);
+  outline:1px solid rgba(236,232,224,.35);outline-offset:3px;opacity:.55;cursor:pointer;transition:.25s}
+#ctl button:hover,#ctl button:focus-visible{opacity:1;background:var(--b);color:#000}
+#ctl button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#snd{left:max(14px,env(safe-area-inset-left,0px))}
+#fxb{right:max(14px,env(safe-area-inset-right,0px))}
+#ctl [aria-pressed=true] .off{display:none}
+#ctl [aria-pressed=false] .on{display:none}
+
+/* --- switch everything off when effects are off -------------------------- */
+html:not(.fx-on) :is(#dark,#whisp,#eyes){display:none}
+
+/* --- custom cursor: mouse devices only ----------------------------------- */
+@media (hover:hover) and (pointer:fine){
+  html.fx-on{--cur-eye:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M2 14C6 7 10 5 14 5s8 2 12 9c-4 7-8 9-12 9S6 21 2 14Z' fill='%23000' stroke='%23ece8e0' stroke-width='1.6' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='14' r='5' fill='%23ece8e0'/%3E%3Ccircle cx='14' cy='14' r='2.2' fill='%23000'/%3E%3C/svg%3E") 14 14,auto;--cur-x:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M14 3V25M6 10H22' stroke='%23000' stroke-width='5.4' stroke-linecap='square' fill='none'/%3E%3Cpath d='M14 3V25M6 10H22' stroke='%23ece8e0' stroke-width='2.2' stroke-linecap='square' fill='none'/%3E%3C/svg%3E") 14 14,pointer}
+  html.fx-on,html.fx-on *{cursor:var(--cur-eye)}
+  html.fx-on :is(a,button:not(:disabled),summary,[data-go],[data-sub],.stk,.card,.tab,.mid,.dir li,.btn,#md){cursor:var(--cur-x)}
+}
+
+/* --- reduced motion ------------------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  .ey svg{animation:none}.tm{display:none}
+  body.shud .sc,body.shud #ring,body.shud .oval,body.shud #stks{animation:none}
+}
